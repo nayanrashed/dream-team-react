@@ -7,6 +7,8 @@ import Cart from "../Cart/Cart";
 const Home = () => {
   const [allPlayers, setAllPlayers] = useState([]);
   const [selectedPlayers, setSelectedPlayers] = useState([]);
+  const [remaining, setRemaining] = useState(20000);
+  const [totalCost, setTotalCost] = useState(0);
 
   useEffect(() => {
     fetch("./data.json")
@@ -20,10 +22,17 @@ const Home = () => {
     if (isExist) {
       return alert("Already booked");
     } else {
-        selectedPlayers.forEach(item=>{
-            count=count+item.salary;
-        })
-        console.log(count);
+      selectedPlayers.forEach((item) => {
+        count = count + item.salary;
+      });
+      const remainingBudget = 20000 - count;
+
+      if (count > 20000) {
+        return alert("taka sesh");
+      }
+      setTotalCost(count);
+      setRemaining(remainingBudget);
+
       const newSelectedPlayers = [...selectedPlayers, player];
       setSelectedPlayers(newSelectedPlayers);
     }
@@ -59,7 +68,11 @@ const Home = () => {
           ))}
         </div>
         <div className="cart">
-          <Cart selectedPlayers={selectedPlayers}></Cart>
+          <Cart
+            selectedPlayers={selectedPlayers}
+            remaining={remaining}
+            totalCost={totalCost}
+          ></Cart>
         </div>
       </div>
     </div>
